@@ -22,8 +22,9 @@ const space_grotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: "indiegoals",
-  description: "Hype up fellow indie hackers",
+  title: "Nextjs starter",
+  description:
+    "Boilerplate code for your nextjs app with lucia authentication and prisma.",
   icons: [{ rel: "icon", url: "/icon-dark.svg" }],
 };
 
