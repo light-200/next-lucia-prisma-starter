@@ -11,7 +11,10 @@ interface ActionResult {
   error: string;
 }
 
-export async function login(_: any, formData: FormData): Promise<ActionResult> {
+export async function login(
+  _: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
   const username = formData.get("username");
   if (
     typeof username !== "string" ||
@@ -73,7 +76,7 @@ export async function login(_: any, formData: FormData): Promise<ActionResult> {
 }
 
 export async function signup(
-  _: any,
+  _: unknown,
   formData: FormData,
 ): Promise<ActionResult> {
   const username = formData.get("username");

@@ -6,7 +6,7 @@ export default async function Home() {
   const session = await validateRequest();
 
   const hello = await api.post.hello({
-    text: session.user?.username || "twitter",
+    text: session.user?.username ?? "twitter",
   });
   return (
     <section className="relative flex h-full w-full flex-1 items-center justify-center">
