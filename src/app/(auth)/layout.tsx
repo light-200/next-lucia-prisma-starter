@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 
 export default function Dashboard({ children }: { children: ReactNode }) {
   return (
-    <div className="relative max-h-screen w-full overflow-hidden lg:grid lg:min-h-[400px] lg:grid-cols-2 xl:min-h-[600px]">
-      <div className="bg-muted sticky hidden lg:block">
+    <div className="relative grid max-h-screen min-h-screen w-full overflow-hidden lg:grid-cols-2">
+      <div className="sticky hidden bg-muted lg:block">
         <Image
           src="/placeholder.svg"
           alt="Image"

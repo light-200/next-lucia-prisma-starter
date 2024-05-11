@@ -6,6 +6,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { generateIdFromEntropySize } from "lucia";
 import { verify } from "@node-rs/argon2";
+import { generateCodeVerifier, generateState } from "arctic";
+import { google } from "./oauth";
 
 interface ActionResult {
   error: string;
@@ -50,6 +52,11 @@ export async function login(
   if (!existingUser) {
     return {
       error: "Incorrect username or password",
+    };
+  }
+  if (!existingUser.password_hash) {
+    return {
+      error: "Password not set, consider using google sign in.",
     };
   }
 
@@ -163,4 +170,38 @@ export async function logout(): Promise<ActionResult> {
     sessionCookie.attributes,
   );
   return redirect("/");
+}
+
+export async function createGoogleAuthUrl() {
+  try {
+    // generate state
+    const state = generateState();
+    const codeVerifier = generateCodeVerifier();
+
+    cookies().set("code", codeVerifier, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    cookies().set("state", state, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    // pass state (and code verifier for PKCE)
+    // returns the authorization url only
+    const authorizationURL = await google.createAuthorizationURL(
+      state,
+      codeVerifier,
+    );
+
+    return {
+      success: true,
+      data: authorizationURL.toString(),
+    };
+  } catch (error: unknown) {
+    return {
+      error: (error as Error)?.message,
+    };
+  }
 }

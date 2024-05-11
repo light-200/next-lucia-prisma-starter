@@ -16,7 +16,7 @@ export default async function Nav() {
         />
       </span>
 
-      <ul className="hidden gap-2 lg:flex">
+      <ul className="flex gap-2">
         <li>
           <Link
             href={"/"}

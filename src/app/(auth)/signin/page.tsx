@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { login } from "@/lib/auth/actions";
+import { createGoogleAuthUrl, login } from "@/lib/auth/actions";
 import { useFormState } from "react-dom";
 import { useSession } from "@/components/session-context";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,15 @@ export default function Page() {
 
   if (session) {
     router.push("/");
+  }
+
+  async function handleGoogleSignIn() {
+    const res = await createGoogleAuthUrl();
+    if (res.error) {
+      console.log(res.error);
+    } else if (res.success) {
+      window.location.href = res.data.toString();
+    }
   }
 
   return (
@@ -62,8 +71,8 @@ export default function Page() {
               <Button
                 variant="outline"
                 title="coming soon!!"
-                disabled
                 className="w-full"
+                onClick={handleGoogleSignIn}
               >
                 Login with Google
               </Button>

@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useSession } from "@/components/session-context";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
-import { signup } from "@/lib/auth/actions";
+import { createGoogleAuthUrl, signup } from "@/lib/auth/actions";
 
 export default function Page() {
   const { session } = useSession();
@@ -23,6 +23,15 @@ export default function Page() {
 
   if (session) {
     router.push("/");
+  }
+
+  async function handleGoogleSignUp() {
+    const res = await createGoogleAuthUrl();
+    if (res.error) {
+      console.log(res.error);
+    } else if (res.success) {
+      window.location.href = res.data.toString();
+    }
   }
 
   return (
@@ -67,10 +76,10 @@ export default function Page() {
               <Button
                 variant="outline"
                 title="coming soon!!"
-                disabled
                 className="w-full"
+                onClick={handleGoogleSignUp}
               >
-                Sign up with GitHub
+                Sign up with Google
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
@@ -81,7 +90,7 @@ export default function Page() {
             </div>
           </CardContent>
           {state?.error ? (
-            <CardDescription className="bg-destructive/10 text-destructive rounded-lg border p-2 text-[0.8rem] font-medium">
+            <CardDescription className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
               {state?.error}
             </CardDescription>
           ) : null}
